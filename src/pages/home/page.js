@@ -1,7 +1,7 @@
 
 
 import React from 'react'
-import obj2json from './obj2json'
+// import obj2json from './obj2json'
 // import { clearTimeout } from 'timers'
 const style = require('./style.css')
 
@@ -18,46 +18,47 @@ class Home extends React.Component{
 
   componentDidMount(){
     
-    let obj = {
-      type:[1,2,3,4],
-      name:{
-        hh:{
-          aa:'cc'
-        },
-        bb:{
-          dd:'ff'
-        }
-      }
-    }
-    // console.log(JSON.stringify(obj))
-    // let objs = this.transform2(obj)
-
-    console.log( JSON.stringify(obj2json(obj)) )
   }
 
 
-  mouseMove = () => {
+  mouseMove = e => {
     // 节流
-    let that = this 
-    
-    let count = that.state.count +1
-    this.debounce( () => this.setState({ count }), 300  )()
+    // this.debounce(this.doSome , 300  )()
+    this.debounce2( this.doSome, 300 )()
   }
 
-  debounce = (fnc, waite) =>{
-    return () => {
-      if(this.timer){
-        clearTimeout(this.timer)
+  doSome = e => {
+    console.log('e',e)
+    this.setState({ count: this.state.count+1 })
+  }
+
+  // debounce = (fnc, waite) =>{
+  //   return e => {
+  //     // let arg = arguments
+  //     if(this.timer){
+  //       clearTimeout(this.timer)
+  //     }
+  //     this.timer = setTimeout( fnc, waite )
+  //   }
+  // }
+
+  debounce2(fnc, waite ){
+    let that = this
+    return function(){
+      // let that = this 
+      let arg = arguments 
+      if(that.timer){
+        clearTimeout(that.timer)
       }
-      this.timer = setTimeout( fnc, waite )
+      that.timer = setTimeout( function(){
+       fnc.apply(that,arg) }, waite )
     }
   }
-
 
 
   render(){
     const { count } = this.state
-    console.log(this.state)
+
     return(
       <div className="ls">
         <div className={ style.content }  onMouseMove={ this.mouseMove } >{count}</div>
